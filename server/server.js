@@ -1,4 +1,5 @@
 const fs = require('fs');
+const http = require('http');
 const { ApolloServer } = require('apollo-server-express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -8,7 +9,7 @@ const jwt = require('jsonwebtoken');
 const db = require('./db');
 
 const port = 9000;
-const jwtSecret = Buffer.from('xkMBdsE+P6242Z2dPV3RD91BPbLIko7t', 'base64');
+const jwtSecret = Buffer.from('Zn8Q5tyZ/G1MHltc4F/gTkVJMlrbKiZt', 'base64');
 
 const app = express();
 app.use(cors(), bodyParser.json(), expressJwt({
@@ -40,4 +41,6 @@ app.post('/login', (req, res) => {
   res.send({token});
 });
 
-app.listen(port, () => console.log(`Server started on port ${port}`));
+const httpServer = http.createServer(app);
+apolloServer.installSubscriptionHandlers(httpServer);
+httpServer.listen(port, () => console.log(`Server started on port ${port}`));
